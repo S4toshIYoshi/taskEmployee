@@ -1,0 +1,18 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+
+	width: 350px;
+}
+
+.buttonsBox {
+	display: flex;
+	justify-content: space-between;
+}
+
+.formItem {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}

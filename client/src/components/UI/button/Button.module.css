@@ -1,0 +1,52 @@
+.main {
+	padding: 10px 20px;
+	border-radius: 7px;
+}
+
+.dark {
+	border: 1px solid #ffffff8f;
+	color: #ffffff8f;
+
+	transition: border 0.3s ease-in-out, color 0.3s ease-in-out,
+		background-color 0.3s ease-in-out;
+}
+
+.dark:hover {
+	border: 1px solid #2b2828f1;
+	color: #2b2828f1;
+	background-color: #ffffff8f;
+}
+
+.light {
+	border: 1px solid #2b2828f1;
+	color: #2b2828f1;
+
+	transition: border 0.3s ease-in-out, color 0.3s ease-in-out,
+		background-color 0.3s ease-in-out;
+}
+
+.light:hover {
+	border: 1px solid #ffffff8f;
+	color: #ffffff8f;
+	background-color: #2b2828f1;
+}
+
+.primary {
+	background-color: #eb4f8b;
+	color: #ffffff8f;
+
+	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.primary:hover {
+	opacity: 0.9;
+	transform: scale(1.03);
+}
+
+.notActive {
+	cursor: not-allowed;
+
+	border: 1px solid #2b2828f1;
+	color: #2b2828f1;
+	background-color: #ffffff8f;
+}
