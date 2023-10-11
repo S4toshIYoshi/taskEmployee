@@ -1,22 +1,24 @@
-import { FC, useState, Dispatch, SetStateAction } from 'react';
-import { TEmpolyee } from '../../types/employee/employee.type';
+import {FC, useState, Dispatch, SetStateAction, useContext} from 'react';
+import {TEmpolyee} from '../../types/employee/employee.type';
 import style from './style.module.css';
-import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-import { BiCheckbox, BiCheckboxSquare } from 'react-icons/bi';
+import {AiOutlineEdit, AiOutlineDelete} from 'react-icons/ai';
+import {BiCheckbox, BiCheckboxSquare} from 'react-icons/bi';
 import clsx from 'clsx';
-import { useRemoveMutation } from '../../app/services/employees';
+import {useGetAllQuery, useRemoveMutation} from '../../app/services/employees';
 import UpdateEmployee from './update/UpdateEmployee';
 
 const CardEmployee: FC<{
 	data: TEmpolyee;
-}> = ({ data }) => {
-	const { firstName, lastName, age, group, course } = data;
+}> = ({data}) => {
+	const {firstName, lastName, age, group, course} = data;
 
 	const [isCheckBox, setIsCheckBox] = useState(true);
 
 	const [isPopupUpdate, setIsPopupUpdate] = useState<boolean>(false);
 
 	const [removeEmployee] = useRemoveMutation();
+
+	const {refetch} = useGetAllQuery();
 
 	function handlerCheckBox() {
 		setIsCheckBox(prev => !prev);
@@ -52,7 +54,10 @@ const CardEmployee: FC<{
 				<div className={style.buttons}>
 					<AiOutlineDelete
 						className={style.checkBox}
-						onClick={() => removeEmployee(data.id)}
+						onClick={() => {
+							removeEmployee(data.id);
+							refetch();
+						}}
 					/>
 					<AiOutlineEdit
 						className={style.checkBox}

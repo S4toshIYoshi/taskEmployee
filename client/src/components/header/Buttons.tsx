@@ -1,16 +1,20 @@
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import {FC} from 'react';
+import {Link} from 'react-router-dom';
 import Description from '../UI/description/Description';
-import { GoPersonAdd } from 'react-icons/go';
-import { AiOutlineLogin } from 'react-icons/ai';
+import {GoPersonAdd} from 'react-icons/go';
+import {AiOutlineLogin} from 'react-icons/ai';
 import style from './Header.module.css';
 import clsx from 'clsx';
-import { useCurrentQuery } from '../../app/services/auth';
+import {useCurrentQuery} from '../../app/services/auth';
+import {useSelector, useDispatch} from 'react-redux';
+import {selectUser, logout} from '../../features/auth/authSlice';
 
-const Buttons: FC<{ logout: boolean }> = ({ logout }) => {
-	const { data } = useCurrentQuery();
+const Buttons: FC<{logout: boolean}> = ({logout}) => {
+	const user = useSelector(selectUser);
+	const dispatch = useDispatch();
 
 	function clearStorage() {
+		dispatch(logout());
 		localStorage.removeItem('token');
 	}
 
@@ -18,14 +22,13 @@ const Buttons: FC<{ logout: boolean }> = ({ logout }) => {
 		return (
 			<div className={style.buttonsBox}>
 				<Description primary={true} className={style.userNick}>
-					{data?.nickName}
+					{user?.nickName}
 				</Description>
 
 				<Link
 					to={'/login'}
 					className={clsx(style.link, style.login)}
-					onClick={clearStorage}
-				>
+					onClick={clearStorage}>
 					<Description>
 						<AiOutlineLogin />
 					</Description>

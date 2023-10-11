@@ -1,31 +1,36 @@
-import { useState } from 'react';
+import {useState, useEffect} from 'react';
 import Input from '../../components/UI/input/Input';
 import Layout from '../../components/layout/Layout';
 import CenterBlock from '../../components/UI/centerBlock/CenterBlock';
 import Button from '../../components/UI/button/Button';
 import style from './Register.module.css';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { IRegister } from '../../types/validateForm/register.interface';
+import {Link, useNavigate} from 'react-router-dom';
+import {useForm, SubmitHandler} from 'react-hook-form';
+import {IRegister} from '../../types/validateForm/register.interface';
 import clsx from 'clsx';
 import ErrorMessage from '../../components/error-message/ErrorMessage';
-import { isErrorWithMessage } from '../../utils/is-error-with-message';
-import { useRegisterMutation } from '../../app/services/auth';
+import {isErrorWithMessage} from '../../utils/is-error-with-message';
+import {useRegisterMutation} from '../../app/services/auth';
+import {useSelector} from 'react-redux';
+import {selectUser} from '../../features/auth/authSlice';
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
+	const user = useSelector(selectUser);
 
-	if (localStorage.getItem('token')) {
-		navigate('/');
-	}
+	useEffect(() => {
+		if (user) {
+			navigate('/');
+		}
+	}, [navigate, user]);
 
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
-		reset,
+		formState: {errors},
+		reset
 	} = useForm<IRegister>({
-		mode: 'onChange',
+		mode: 'onChange'
 	});
 	const [registerMutation, registerMutationRsult] = useRegisterMutation();
 	const [error, setError] = useState('');
@@ -60,8 +65,8 @@ const RegisterPage = () => {
 								pattern: {
 									value:
 										/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
-									message: 'Не правильная почта',
-								},
+									message: 'Не правильная почта'
+								}
 							})}
 							type='text'
 							placeholder='Почта'
@@ -76,8 +81,8 @@ const RegisterPage = () => {
 									value:
 										/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/,
 									message:
-										'Пароль должен содержать минимум 6 сиволов, спец символ, буквы A-z',
-								},
+										'Пароль должен содержать минимум 6 сиволов, спец символ, буквы A-z'
+								}
 							})}
 							placeholder='Пароль'
 							type='password'
@@ -89,7 +94,7 @@ const RegisterPage = () => {
 					<div className={style.formItem}>
 						<Input
 							{...register('FirstName', {
-								required: 'Имя обязательное поле',
+								required: 'Имя обязательное поле'
 							})}
 							placeholder='Имя'
 							variant='max'
@@ -97,7 +102,7 @@ const RegisterPage = () => {
 						/>
 						<Input
 							{...register('LastName', {
-								required: 'Фамилия обязательное поле',
+								required: 'Фамилия обязательное поле'
 							})}
 							placeholder='Фамилия'
 							variant='max'
@@ -108,7 +113,7 @@ const RegisterPage = () => {
 					<div className={style.formItem}>
 						<Input
 							{...register('nickName', {
-								required: 'Никнейм обязательное поле',
+								required: 'Никнейм обязательное поле'
 							})}
 							placeholder='Никнейм'
 							variant='max'
@@ -116,7 +121,7 @@ const RegisterPage = () => {
 						/>
 						<Input
 							{...register('group', {
-								required: 'Группа обязательное поле',
+								required: 'Группа обязательное поле'
 							})}
 							placeholder='Группа'
 							variant='max'

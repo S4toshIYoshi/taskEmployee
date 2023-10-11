@@ -1,24 +1,26 @@
-import { Dispatch, FC, SetStateAction } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { TEmpolyee } from '../../../types/employee/employee.type';
+import {Dispatch, FC, SetStateAction} from 'react';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {TEmpolyee} from '../../../types/employee/employee.type';
 import CenterBlock from '../../UI/centerBlock/CenterBlock';
 import style from './style.module.css';
 import Input from '../../UI/input/Input';
 import Button from '../../UI/button/Button';
-import { useEditMutation } from '../../../app/services/employees';
+import {useEditMutation, useGetAllQuery} from '../../../app/services/employees';
 
 const UpdateEmployee: FC<{
 	actionClose: Dispatch<SetStateAction<boolean>>;
 	data: TEmpolyee;
-}> = ({ actionClose, data }) => {
+}> = ({actionClose, data}) => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
-		reset,
+		formState: {errors},
+		reset
 	} = useForm<TEmpolyee>({
-		mode: 'onChange',
+		mode: 'onChange'
 	});
+
+	const {refetch} = useGetAllQuery();
 
 	const [updateEmployee] = useEditMutation();
 
@@ -27,6 +29,7 @@ const UpdateEmployee: FC<{
 
 		try {
 			await updateEmployee(dataHandler).unwrap();
+			refetch();
 		} catch (error) {
 			console.log(error);
 		}
@@ -49,7 +52,7 @@ const UpdateEmployee: FC<{
 						<Input
 							{...register('firstName', {
 								required: 'Имя обязательное поле',
-								value: data.firstName,
+								value: data.firstName
 							})}
 							placeholder='Имя'
 							variant='max'
@@ -58,7 +61,7 @@ const UpdateEmployee: FC<{
 						<Input
 							{...register('lastName', {
 								required: 'Фамилия обязательное поле',
-								value: data.lastName,
+								value: data.lastName
 							})}
 							placeholder='Фамилия'
 							variant='max'
@@ -70,7 +73,7 @@ const UpdateEmployee: FC<{
 						<Input
 							{...register('group', {
 								required: 'Группа обязательное поле',
-								value: data.group,
+								value: data.group
 							})}
 							placeholder='Группа'
 							variant='max'
@@ -82,9 +85,9 @@ const UpdateEmployee: FC<{
 								required: 'Курс обязательное поле',
 								pattern: {
 									value: /[1-4]/,
-									message: 'Макимально 4 курса',
+									message: 'Макимально 4 курса'
 								},
-								value: data.course,
+								value: data.course
 							})}
 							placeholder='Курс'
 							variant='max'
@@ -93,7 +96,7 @@ const UpdateEmployee: FC<{
 						<Input
 							{...register('age', {
 								required: 'Возраст обязательное поле',
-								value: data.age,
+								value: data.age
 							})}
 							placeholder='Возраст'
 							variant='max'

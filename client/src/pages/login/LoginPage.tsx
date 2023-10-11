@@ -1,30 +1,36 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import CenterBlock from '../../components/UI/centerBlock/CenterBlock';
 import Layout from '../../components/layout/Layout';
 import style from './Login.module.css';
 import Input from '../../components/UI/input/Input';
 import Button from '../../components/UI/button/Button';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { ILogin } from '../../types/validateForm/login.interface';
-import { useLoginMutation } from '../../app/services/auth';
-import { isErrorWithMessage } from '../../utils/is-error-with-message';
+import {Link, useNavigate} from 'react-router-dom';
+import {useForm, SubmitHandler} from 'react-hook-form';
+import {ILogin} from '../../types/validateForm/login.interface';
+import {useLoginMutation} from '../../app/services/auth';
+import {isErrorWithMessage} from '../../utils/is-error-with-message';
 import ErrorMessage from '../../components/error-message/ErrorMessage';
+import {useSelector} from 'react-redux';
+import {selectUser} from '../../features/auth/authSlice';
 
 const LoginPage = () => {
 	const navigate = useNavigate();
 
-	if (localStorage.getItem('token')) {
-		navigate('/');
-	}
+	const user = useSelector(selectUser);
+
+	useEffect(() => {
+		if (user) {
+			navigate('/');
+		}
+	}, [navigate, user]);
 
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
-		reset,
+		formState: {errors},
+		reset
 	} = useForm<ILogin>({
-		mode: 'onChange',
+		mode: 'onChange'
 	});
 
 	const [loginUser, loginUserResult] = useLoginMutation();
@@ -60,8 +66,8 @@ const LoginPage = () => {
 								pattern: {
 									value:
 										/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
-									message: 'Не правильная почта',
-								},
+									message: 'Не правильная почта'
+								}
 							})}
 							type='text'
 							placeholder='Почта'
@@ -71,7 +77,7 @@ const LoginPage = () => {
 
 						<Input
 							{...register('password', {
-								required: 'Пароль обязательное поле',
+								required: 'Пароль обязательное поле'
 							})}
 							placeholder='Пароль'
 							type='password'

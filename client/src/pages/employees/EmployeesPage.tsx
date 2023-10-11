@@ -1,23 +1,30 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import Layout from '../../components/layout/Layout';
 import style from './style.module.css';
 import Button from '../../components/UI/button/Button';
 import CardEmployee from '../../components/employee/CardEmployee';
-import { useGetAllQuery } from '../../app/services/employees';
-import { TEmpolyee } from '../../types/employee/employee.type';
+import {useGetAllQuery} from '../../app/services/employees';
+import {TEmpolyee} from '../../types/employee/employee.type';
 import CreateEmployee from '../../components/employee/create/CreateEmployee';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import Description from '../../components/UI/description/Description';
+import {useSelector} from 'react-redux';
+import {selectUser} from '../../features/auth/authSlice';
 
 const Employees = () => {
+	const [isPopupCreate, setIsPopupCreate] = useState<boolean>(false);
+
 	const navigate = useNavigate();
 
-	if (!localStorage.getItem('token')) {
-		navigate('/login');
-	}
+	const user = useSelector(selectUser);
 
-	const { data, isLoading } = useGetAllQuery();
+	const {data, isLoading} = useGetAllQuery();
 
-	const [isPopupCreate, setIsPopupCreate] = useState<boolean>(false);
+	useEffect(() => {
+		if (!user) {
+			navigate('/login');
+		}
+	}, [navigate, user]);
 
 	if (isLoading) {
 		return (
@@ -34,21 +41,22 @@ const Employees = () => {
 					<div className={style.buttons}>
 						<Button
 							variant='primary'
-							onClick={() => setIsPopupCreate(prev => !prev)}
-						>
+							onClick={() => setIsPopupCreate(prev => !prev)}>
 							Добавить
 						</Button>
 					</div>
 
 					<div className={style.content}>
-						{data ? (
+						{!!data?.length ? (
 							<>
 								{data?.map((el: TEmpolyee) => (
 									<CardEmployee key={el.id} data={el} />
 								))}
 							</>
 						) : (
-							<div>Нет абитуриентов</div>
+							<Description className={style.description}>
+								Нет абитуриентов
+							</Description>
 						)}
 					</div>
 				</div>

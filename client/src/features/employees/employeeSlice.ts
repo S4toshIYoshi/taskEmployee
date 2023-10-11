@@ -1,21 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { TEmpolyee } from '../../types/employee/employee.type';
-import { employeesApi } from '../../app/services/employees';
-import { RootState } from '../../app/store';
+import {createSlice} from '@reduxjs/toolkit';
+import {TEmpolyee} from '../../types/employee/employee.type';
+import {employeesApi} from '../../app/services/employees';
+import {RootState} from '../../app/store';
 
 interface IInitialState {
 	employees: TEmpolyee[] | null;
 }
 
 const initialState: IInitialState = {
-	employees: null,
+	employees: null
 };
 
 const slice = createSlice({
 	name: 'employees',
 	initialState,
 	reducers: {
-		logout: () => initialState,
+		logout: () => initialState
 	},
 	extraReducers: builder => {
 		builder.addMatcher(
@@ -24,7 +24,7 @@ const slice = createSlice({
 				state.employees = action.payload;
 			}
 		);
-	},
+	}
 });
 
 export default slice.reducer;

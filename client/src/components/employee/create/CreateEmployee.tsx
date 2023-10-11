@@ -1,29 +1,35 @@
-import { Dispatch, FC, SetStateAction } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { TEmpolyee } from '../../../types/employee/employee.type';
+import {Dispatch, FC, SetStateAction} from 'react';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {TEmpolyee} from '../../../types/employee/employee.type';
 import CenterBlock from '../../UI/centerBlock/CenterBlock';
 import style from './style.module.css';
 import Input from '../../UI/input/Input';
 import Button from '../../UI/button/Button';
-import { useCreateMutation } from '../../../app/services/employees';
+import {
+	useCreateMutation,
+	useGetAllQuery
+} from '../../../app/services/employees';
 
 const CreateEmployee: FC<{
 	actionClose: Dispatch<SetStateAction<boolean>>;
-}> = ({ actionClose }) => {
+}> = ({actionClose}) => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
-		reset,
+		formState: {errors},
+		reset
 	} = useForm<TEmpolyee>({
-		mode: 'onChange',
+		mode: 'onChange'
 	});
+
+	const {refetch} = useGetAllQuery();
 
 	const [createEmployee] = useCreateMutation();
 
 	const handler: SubmitHandler<TEmpolyee> = async (data: TEmpolyee) => {
 		try {
 			await createEmployee(data).unwrap();
+			refetch();
 			actionClose(false);
 		} catch (error) {
 			console.log(error);
@@ -40,7 +46,7 @@ const CreateEmployee: FC<{
 					<div className={style.formItem}>
 						<Input
 							{...register('firstName', {
-								required: 'Имя обязательное поле',
+								required: 'Имя обязательное поле'
 							})}
 							placeholder='Имя'
 							variant='max'
@@ -48,7 +54,7 @@ const CreateEmployee: FC<{
 						/>
 						<Input
 							{...register('lastName', {
-								required: 'Фамилия обязательное поле',
+								required: 'Фамилия обязательное поле'
 							})}
 							placeholder='Фамилия'
 							variant='max'
@@ -59,7 +65,7 @@ const CreateEmployee: FC<{
 					<div className={style.formItem}>
 						<Input
 							{...register('group', {
-								required: 'Группа обязательное поле',
+								required: 'Группа обязательное поле'
 							})}
 							placeholder='Группа'
 							variant='max'
@@ -71,8 +77,8 @@ const CreateEmployee: FC<{
 								required: 'Курс обязательное поле',
 								pattern: {
 									value: /[1-4]/,
-									message: 'Макимально 4 курса',
-								},
+									message: 'Макимально 4 курса'
+								}
 							})}
 							placeholder='Курс'
 							variant='max'
@@ -80,7 +86,7 @@ const CreateEmployee: FC<{
 						/>
 						<Input
 							{...register('age', {
-								required: 'Возраст обязательное поле',
+								required: 'Возраст обязательное поле'
 							})}
 							placeholder='Возраст'
 							variant='max'
