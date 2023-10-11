@@ -15,6 +15,10 @@ const login = async (req, res) => {
 		},
 	});
 
+	if(!user) {
+		return res.status(400).json({ message: 'Пользователя с таким email не существует' });
+	}
+
 	const isPassword = user && (await brypt.compare(password, user.password));
 	const secret = process.env.JWT_SECRET;
 
